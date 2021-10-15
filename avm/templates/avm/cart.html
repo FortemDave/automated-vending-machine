@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+</head>
+<body>
+
+{% if item_list %}
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Item Id</th>
+      <th scope="col">Item - Name</th>
+      <th scope="col">Price</th>
+      <th scope="col">Quantity Available</th>
+        <th scope="col">Items selected</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  {% for item in item_list %}
+    <tr>
+      <th scope="row">{{ item.id }}</th>
+      <td>{{ item.item_name}}</td>
+      <td>{{item.item_price}}</td>
+      <td>{{item.item_quantity_available}}</td>
+      <td>{{item.item_selected}}</td>
+      <td> <button type="button" class="btn btn-info cart" id="pr{{ item.id }}">Add to cart</button> </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+    <p>No Items are available.</p>
+{% endif %}
+
+<nav class="navbar fixed-bottom navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Automated Vending Machine</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Cart(<span id="cart">0</span>)</a>
+        </li>
+    </div>
+  </div>
+</nav>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script>
+console.log("Working");
+if (localStorage.getItem('cart') == null){
+    var cart = {};
+}
+else{
+    cart = JSON.parse(localStorage.getItem('cart'));
+        var totalItems = 0 ;
+    for(var i=0; i<Object.values(cart).length;i++){
+        totalItems += Object.values(cart)[i];
+    }
+    document.getElementById('cart').innerHTML = totalItems;
+}
+$('.cart').click(function(){
+    console.log("click");
+    var idstr = this.id.toString();
+    console.log(idstr)
+    if(cart[idstr] != undefined){
+        cart[idstr] = cart[idstr] + 1;
+    }
+    else{
+        cart[idstr] = 1;
+    }
+    console.log(cart);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    var totalItems = 0 ;
+    for(var i=0; i<Object.values(cart).length;i++){
+        totalItems += Object.values(cart)[i];
+    }
+    document.getElementById('cart').innerHTML = totalItems;
+});
+
+</script>
+
+</body>
+</html>
