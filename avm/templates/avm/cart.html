@@ -29,7 +29,9 @@
       <td>{{item.item_price}}</td>
       <td>{{item.item_quantity_available}}</td>
       <td>{{item.item_selected}}</td>
-      <td> <button type="button" class="btn btn-info cart" id="pr{{ item.id }}">Add to cart</button> </td>
+      <td>  <span  id="divpr{{ item.id }}" class="divpr">
+      <button type="button" class="btn btn-info cart" id="pr{{ item.id }}">Add to cart</button>
+      </span> </td>
     </tr>
   {% endfor %}
   </tbody>
@@ -49,6 +51,7 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="#">Cart(<span id="cart">0</span>)</a>
         </li>
+      </ul>
     </div>
   </div>
 </nav>
@@ -66,6 +69,7 @@ else{
         totalItems += Object.values(cart)[i];
     }
     document.getElementById('cart').innerHTML = totalItems;
+    updateCart(cart);
 }
 $('.cart').click(function(){
     console.log("click");
@@ -84,8 +88,34 @@ $('.cart').click(function(){
         totalItems += Object.values(cart)[i];
     }
     document.getElementById('cart').innerHTML = totalItems;
+    updateCart(cart);
 });
 
+function updateCart(cart){
+  for (var item in cart){
+      document.getElementById('div' + item).innerHTML = "<button id='minus" + item + "' class='btn btn-primary minus'>-</button> <span id='val" + item + "''>" + cart[item] + "</span> <button id='plus" + item + "' class='btn btn-primary plus'> + </button>";
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+    var totalItems = 0 ;
+    for(var i=0; i<Object.values(cart).length;i++){
+        totalItems += Object.values(cart)[i];
+    }
+    document.getElementById('cart').innerHTML = totalItems;
+}
+
+$('.divpr').on("click", "button.minus", function() {
+    a = this.id.slice(7, );
+    cart['pr' + a] = cart['pr' + a] - 1;
+    cart['pr' + a] = Math.max(0, cart['pr' + a]);
+    document.getElementById('valpr' + a).innerHTML = cart['pr' + a];
+    updateCart(cart);
+});
+$('.divpr').on("click", "button.plus", function() {
+    a = this.id.slice(6, );
+    cart['pr' + a] = cart['pr' + a] + 1;
+    document.getElementById('valpr' + a).innerHTML = cart['pr' + a];
+    updateCart(cart);
+});
 </script>
 
 </body>
