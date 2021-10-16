@@ -1,3 +1,3 @@
 # automated-vending-machine
 
-For viewing cart -  http://127.0.0.1:8000/
+For viewing cart -  http://127.0.0.1:8000/avm/cart
