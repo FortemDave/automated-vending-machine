@@ -15,3 +15,10 @@ def cart(request):
         'item_list': item_list
     }
     return render(request, 'avm/cart.html', context)
+
+def checkout(request):
+    item_list = Item.objects.all()
+    context = {
+        'item_list': item_list
+    }
+    return render(request, 'avm/checkout.html', context)
