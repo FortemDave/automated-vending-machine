@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Item
+from .models import Item, order
 # Create your views here.
 
 def index(request):
@@ -17,8 +17,18 @@ def cart(request):
     return render(request, 'avm/cart.html', context)
 
 def checkout(request):
-    item_list = Item.objects.all()
-    context = {
-        'item_list': item_list
-    }
-    return render(request, 'avm/checkout.html', context)
+    # item_list = Item.objects.all()
+    if request.method == "POST":
+        itemJson = request.POST.get('itemsJson','')
+        phoneNo = request.POST.get('phone','')
+        orders =  order(items_json = itemJson, phone_no = phoneNo)
+        orders.save()
+        thank = True
+        # id = orders.order_id
+        context = {
+            'thank' : thank,
+            # 'id':id
+        }
+        return render(request, 'avm/checkout.html', context)
+
+    return render(request, 'avm/checkout.html')
