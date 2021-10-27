@@ -7,7 +7,8 @@ def index(request):
     return HttpResponse("Hello !!! This is an automated vending machine")
 
 def home(request):
-    return HttpResponse("You are at Machine 1 . Click Enter to proceed forward")
+    return render(request,'avm/index.html')
+    # return HttpResponse("You are at Machine 1 . Click Enter to proceed forward")
 
 def cart(request):
     item_list = Item.objects.all()

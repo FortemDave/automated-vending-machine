@@ -19,7 +19,7 @@
 
     </ul>
 
-    <form method="post" action="/avm/checkout"> {% csrf_token %}
+    <form method="post" action="/checkout"> {% csrf_token %}
       <input type="hidden" name="itemsJson" id="itemsJson">
       Phone Number : <input type="text" name="phone" id="phone" placeholder="Phone Number">
       <button type="submit" >Place Order</button>
@@ -85,10 +85,10 @@
               }
                 $('#itemsJson').val(JSON.stringify(cart));
                 // {% if thank %}
-                let id = 
-                alert(`Thanks for using this machine. Your transaction id is ${{ id }}`);
+                let id1 = {{ id }}
+                alert(`Thanks for using this machine. Your transaction id is ${{ id1 }}`);
                 localStorage.clear();
-                document.location = '/avm/cart';
+                document.location = '/cart';
                 // {% endif %}
     </script>
 </body>
