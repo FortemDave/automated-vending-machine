@@ -85,10 +85,10 @@
               }
                 $('#itemsJson').val(JSON.stringify(cart));
                 // {% if thank %}
-                let id1 = {{ id }}
-                alert(`Thanks for using this machine. Your transaction id is ${{ id1 }}`);
+                // let id1 = {{ id }}
+                alert('Thanks for using this machine. Your transaction id is ' + {{ id }} +  '.');
                 localStorage.clear();
-                document.location = '/cart';
+                document.location = '{% url 'home' %}';
                 // {% endif %}
     </script>
 </body>

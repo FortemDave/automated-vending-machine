@@ -25,10 +25,10 @@ def checkout(request):
         orders =  order(items_json = itemJson, phone_no = phoneNo)
         orders.save()
         thank = True
-        # id = orders.order_id
+        id = orders.id
         context = {
             'thank' : thank,
-            # 'id':id
+            'id':id
         }
         return render(request, 'avm/checkout.html', context)
 
