@@ -19,7 +19,7 @@
 
     </ul>
 
-    <form method="post" action="/checkout"> {% csrf_token %}
+    <form method="post" action="checkout"> {% csrf_token %}
       <input type="hidden" name="itemsJson" id="itemsJson">
       Phone Number : <input type="text" name="phone" id="phone" placeholder="Phone Number">
       <button type="submit" >Place Order</button>

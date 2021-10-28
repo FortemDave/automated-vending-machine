@@ -4,7 +4,7 @@ from django.db.models.fields import CharField
 # Create your models here.
 
 class Item(models.Model):
-    item_name = models.CharField(max_length=50)
+    item_name = models.CharField(max_length=100)
     item_price = models.IntegerField(default=0)
     item_quantity_available = models.IntegerField(default=10)
     # item_selected = models.IntegerField(default=0)
