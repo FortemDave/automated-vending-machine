@@ -4,12 +4,50 @@
     <meta charset="UTF-8">
     <link href="https://cdn.discordapp.com/attachments/834128348686581815/901362037521801217/unknown.png" rel="icon">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Automated Vending Machine</title>
+    <style>
+        body{
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80');            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            
+            
+        }
+        .container{
+            text-align:center;
+            margin: 0;
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            color:white;
+
+        }
+        a{
+            text-decoration:none;
+            font-weight: bold;
+            font-size: 20px;
+            
+        }
+
+        .btn{
+            width:100px;
+            height:50px
+        }
+    </style>
 </head>
 <body>
-    <h2>Welcome!!! , you are currently using machine no  12</h2>
+    <div class="container">    <h2>Welcome!!! , you are currently using machine no  12</h2>
+    
     <br>
-    Proceed to select items in this machine <button> <a href="{% url 'cart' %}"> GO</a></button>
+<h4>    Proceed to select items in this machine </h4>
+    <br>
+    <button type="button" class="btn btn-primary"> <a style="color: white;" href="{% url 'cart' %}"> GO</a></button>
+</div>
+
 </body>
 </html>
