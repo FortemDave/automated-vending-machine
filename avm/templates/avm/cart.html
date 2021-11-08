@@ -6,13 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>My Cart</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <style>
+      .container{
+        margin-top: 35px;
+        color: white !important;
+      }
+      body{
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1475275083424-b4ff81625b60?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1172&q=80');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+        
+        
+    }
+    .color{
+      color:white !important;
+    }
 
+    .color:hover{
+     color: white !important;
+    }
+    </style>
 </head>
 <body>
-
+<div class="container">
 {% if item_list %}
 <table class="table table-hover">
-  <thead>
+  <thead class="color">
     <tr>
       <th scope="col">Item Id</th>
       <th scope="col">Item - Name</th>
@@ -22,16 +42,16 @@
     </tr>
   </thead>
 
-  <tbody>
+  <tbody class="color">
   {% for item in item_list %}
-    <tr>
-      <th scope="row">{{ item.id }}</th>
-      <td id="namepr{{item.id}}" >{{ item.item_name}}</td>
-      <td>{{item.item_price}}</td>
-      <td>{{item.item_quantity_available}}</td>
+    <tr class="color">
+      <th class="color" scope="row">{{ item.id }}</th>
+      <td class="color" id="namepr{{item.id}}" >{{ item.item_name}}</td>
+      <td class="color" > {{item.item_price}}</td>
+      <td class="color" >{{item.item_quantity_available}}</td>
       <!-- <td>{{item.item_selected}}</td> -->
-      <td>  <span  id="divpr{{ item.id }}" class="divpr">
-      <button type="button" class="btn btn-info cart" id="pr{{ item.id }}">Add to cart</button>
+      <td class="color"  >  <span  id="divpr{{ item.id }}" class="divpr">
+      <button type="button" class="btn btn-primary cart" id="pr{{ item.id }}">Add to cart</button>
       </span> </td>
     </tr>
   {% endfor %}
@@ -40,6 +60,8 @@
 {% else %}
     <p>No Items are available.</p>
 {% endif %}
+
+</div>
 
 <nav class="navbar fixed-bottom navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
