@@ -9,23 +9,41 @@
     <style>
       .container{
         margin-top: 35px;
-        color: white !important;
+        /* color: white !important; */
       }
       body{
-        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1475275083424-b4ff81625b60?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1172&q=80');
+        /* background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1475275083424-b4ff81625b60?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1172&q=80'); */
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-size: cover;
-        
+        color:black;
         
     }
     .color{
-      color:white !important;
+      /* color:white !important; */
     }
 
     .color:hover{
-     color: white !important;
+     /* color: white !important; */
     }
+    .product_img{
+      width: 50px;
+      height: 50px;
+    }
+    @media only screen and (min-width: 441px) and (max-width: 767px){
+      /* .minus{
+      width:6px;
+      height:6px;
+    }
+    .plus{
+      width:6px;
+      height:6px;
+    }
+       */
+
+
+    }
+
     </style>
 </head>
 <body>
@@ -34,7 +52,7 @@
 <table class="table table-hover">
   <thead class="color">
     <tr>
-      <th scope="col">Item Id</th>
+      <th scope="col">Item</th>
       <th scope="col">Item - Name</th>
       <th scope="col">Price</th>
       <th scope="col">Quantity Available</th>
@@ -45,11 +63,12 @@
   <tbody class="color">
   {% for item in item_list %}
     <tr class="color">
-      <th class="color" scope="row">{{ item.id }}</th>
+      <th class="color" scope="row"><img class="product_img" src={{item.item_picture_url}}></th>
       <td class="color" id="namepr{{item.id}}" >{{ item.item_name}}</td>
       <td class="color" > {{item.item_price}}</td>
       <td class="color" >{{item.item_quantity_available}}</td>
-      <!-- <td>{{item.item_selected}}</td> -->
+      
+      <td>{{item.item_selected}}</td>
       <td class="color"  >  <span  id="divpr{{ item.id }}" class="divpr">
       <button type="button" class="btn btn-primary cart" id="pr{{ item.id }}">Add to cart</button>
       </span> </td>
