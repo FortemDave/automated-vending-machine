@@ -1,161 +1,226 @@
-import mysql.connector
+import sqlite3 as sql
+import json
 
-#################################################################################################
+global SPACE
+SPACE = "\t\t"
 
-def add_customer(db, id, name, pwd):
-    cursor = db.cursor()
-    cursor.execute("USE Vending_DB;")
-    cursor.execute(f"""
-    INSERT INTO customer
-    VALUES ({id}, "{name}", "{pwd}");
-""")
+def transac_info(db):
+    cur = db.cursor()
+    cur.execute('''
+    SELECT * FROM avm_order;
+    '''
+    )
+
+    for row in cur.fetchall():
+        total_cost = 0
+        transac_id = row[0]
+        print(transac_id)
+        phone_num = row[1]
+        json_string = row[2]
+        data = json.loads(json_string)
+        names = data.values()
+        names = [len(name[1]) for name in names]
+        max_name_length = max(names)
+        product_ids = list(data.keys())
+        product_ids = [string_id[2:] for string_id in product_ids]
+        # print(product_ids)
+        # print(data)
+        print("===================================================================")
+        name_title = "NAME" + " "*(max_name_length-4)
+        print(f'PID{SPACE}{name_title}{SPACE}QUANTITY{SPACE}PRICE')
+        for id in product_ids:
+            cur.execute(f'''
+                SELECT item_price FROM avm_item
+                WHERE id = {id};
+            ''')
+
+            product_per_price = cur.fetchall()[0][0]
+            product_quantity = data['pr'+ id][0]
+            product_name = data['pr'+ id][1]
+            product_name = product_name + " "*(max_name_length - len(product_name))
+            # print(product_per_price)
+            # print(product_quantity)
+            product_overall_price = product_per_price*product_quantity
+            total_cost += product_overall_price
+
+            print(f"{id}{SPACE}{product_name}{SPACE}{product_quantity}{SPACE}\t{product_overall_price}")
+        print(f"\nOVERALL TRANSACTION COST = {total_cost}")
+        print("====================================================================")
+
+def reStock(db, pr_id, reStkAmount):
+    cur = db.cursor()
+    cur.execute(f''' 
+        SELECT item_quantity_available, item_name
+        FROM avm_item
+        WHERE id = {pr_id};
+    ''')
+    
+    avalQuantity, item_name = cur.fetchall()[0]
+    # print(avalQuantity)
+    
+    cur.execute(f''' 
+        UPDATE avm_item 
+        SET item_quantity_available = {avalQuantity + reStkAmount}
+        WHERE id = {pr_id};
+    ''')
     db.commit()
+    print("====================================================================\n")
+    print(f"The quantity of the Item Id {pr_id} and Item Name {item_name} is updated to {avalQuantity + reStkAmount}\n")
+    print("====================================================================")
 
-#################################################################################################
+    
+def lowStockRestock(db):
+    cur = db.cursor()
+    cur.execute(''' 
+        SELECT id, item_name, item_quantity_available
+        FROM avm_item
+    ''')
 
-def commit_transaction(db, trans_ID, product_id, customer_id, quant):
-    cursor = db.cursor()
-    cursor.execute("USE Vending_DB;")
-    cursor.execute(f"""
-        SELECT product_quantity
-        FROM stock
-        WHERE product_id = {product_id};
-    """)
-    available = cursor.fetchall()
-    available = available[0][0]
-
-    cursor.execute(f"""
-        SELECT * FROM customer
-        WHERE customer_ID = {customer_id};
-    """)
-
-    customer_info = cursor.fetchall()
-    customer_info = customer_info[0]
-
-    cursor.execute(f"""
-        SELECT * FROM stock
-        WHERE product_ID = {product_id};
-    """)
-
-    product_info = cursor.fetchall()
-    product_info = product_info[0]
-
-    if quant <= available:
-        cursor.execute(f"""
-            INSERT INTO transactions
-            VALUES ({trans_ID}, {customer_info[0]}, {product_info[0]}, {quant}, TRUE);
-        """)
-        cursor.execute(f"""
-            UPDATE stock
-            SET product_quantity = {available-quant}
-            WHERE product_ID = {product_info[0]};
-        """)
-        print(f"Transaction for {product_info[0]}: {product_info[1]} SUCCESSFULL.")
+    lowStockItems = []
+    defRestock = 10
+    item_count = 0
+    print("====================================================================")
+    for item in cur.fetchall():
+        if item[2] <= 5:
+            lowStockItems.append([item[0], item[1], item[2]])
+            reStock(db, item[0], defRestock)
+            item_count += 1
+    
+    if item_count == 0:
+        print("No items are in the need of restock")
     else:
-        print(f"Transaction for {product_info[0]}: {product_info[1]} FAILED.")
-        cursor.execute(f"""
-            INSERT INTO transactions
-            VALUES ({trans_ID}, {customer_info[0]}, {product_info[0]}, {quant}, FALSE);
-        """)
-
+        print(f"{item_count} items have been successfully restocked")
+    print("====================================================================")
+    # print(lowStockItems)
     db.commit()
 
-#################################################################################################
 
-def add_product(db, id, name, quant):
-    cursor = db.cursor()
-    cursor.execute("USE Vending_DB;")
-    cursor.execute(f"""
-        INSERT INTO stock
-        VALUES ({id}, "{name}", {quant});
-    """)
-    db.commit()
+def priceCalc(db, order_id):
+    cur = db.cursor()
+    cur.execute(f''' 
+        SELECT items_json
+        FROM avm_order
+        WHERE id = {order_id};
+    ''')
 
-#################################################################################################
+    json_string = cur.fetchall()[0][0]
+    raw_dict = json.loads(json_string)
+    # print(raw_dict)
+    
+    orderPrice = []
+    for keys, values in raw_dict.items():
+        keys = keys[2:]
+        itemQuantity = values[0]
+        cur.execute(f''' 
+            SELECT item_price, item_name
+            FROM avm_item
+            WHERE id = {keys};
+        ''')
+        indvPrice, item_name = cur.fetchall()[0]
+        itemPrice = indvPrice * itemQuantity
+        orderPrice.append([keys, itemPrice, item_name])
+    print("====================================================================")
+    print(f"Pricing of the items purchased in order {order_id} : ")
+    for i in range(len(orderPrice)):
+        print(f"Item ID : {orderPrice[i][0]} \tItem Name :  {orderPrice[i][2]} \t\tPurchase : {orderPrice[i][1]}")
+    print("====================================================================")
+    return orderPrice
 
-def restock(db):
-    cursor = db.cursor()
-    cursor.execute("USE Vending_DB;")
-    cursor.execute(f"""
-        UPDATE stock
-        SET product_quantity = 15
-        WHERE product_quantity < 15;
-    """)
-    db.commit()
 
-#################################################################################################
+def productInfo(db, item_id):
+    cur = db.cursor()
+    cur.execute(f''' 
+        SELECT * 
+        FROM avm_item
+        WHERE id = {item_id};
+    ''')
 
-def get_customer_details(db, id):
-    cursor = db.cursor()
-    cursor.execute("USE Vending_DB;")
-    cursor.execute(f"""
-        SELECT * FROM customer
-        WHERE customer_ID = {id};
-    """)
+    rawInfo = cur.fetchall()[0]
+    itemName, itemPrice, itemQuantity = rawInfo[1], rawInfo[2], rawInfo[3]
+    print("====================================================================")
+    print(f"Item Name : {itemName}, Item ID : {item_id}, Item Price : {itemPrice}, Item Quantity : {itemQuantity}")
+    print("====================================================================")
+    return itemName, item_id, itemQuantity, itemPrice
+    # print(rawInfo)
 
-    info = cursor.fetchall()
-    info = info[0]
+def add_product(db, product_name, price, quantity, img_url = ""):
+    cur = db.cursor()
 
-    print("==================Customer Details======================")
-    print("ID: ", info[0])
-    print("Name: ", info[1])
-    print("========================================================")
+    cur.execute(f'''INSERT INTO avm_item (item_price, item_quantity_available, item_name)
+                    VALUES ({price}, {quantity}, {product_name});
+        ''')
 
-#################################################################################################
+    # cur.execute(f'''INSERT INTO avm_item ({price}, {quantity}, {product_name})
+    #                 VALUES (item_price, item_quantity_available, item_name);
+    #     ''')
 
-def get_product_details(db, id):
-    cursor = db.cursor()
-    cursor.execute("USE Vending_DB;")
-    cursor.execute(f"""
-        SELECT * FROM stock
-        WHERE product_ID = {id};
-    """)
 
-    info = cursor.fetchall()
-    info = info[0]
+# db = sql.connect('db.sqlite3')
+# cur = db.cursor()
+# # transac_info(db)
+# reStock(db, 2, 15)
+# # priceCalc(db, 2)
+# # productInfo(db, 5)
+# # add_product(db, 'pepsi', 20, 10)
+# # lowStockRestock(db)
 
-    print("==================Product Details======================")
-    print("ID: ", info[0])
-    print("Name: ", info[1])
-    print("Quantity: ", info[2])
-    print("=======================================================")
+def menu():
+    
+    print('''\nEnter the operation to perform : 
+             \n1. Transaction Directory
+             \n2. Restock Item
+             \n3. Order Information
+             \n4. Item Information
+             \n5. Add Product
+             \n6. Check and Restock
+             \n7. Exit admin access
+    ''')
 
-#################################################################################################
+def main():
 
-def transaction_info(db, id):
-    cursor = db.cursor()
-    cursor.execute("USE Vending_DB;")
-    cursor.execute(f"""
-        SELECT transactions.transaction_ID, stock.product_ID, stock.product_name, transactions.quantity, transactions.customer_ID,
-             customer.customer_name, transactions.check
-        FROM transactions
-        INNER JOIN customer ON transactions.customer_ID = customer.customer_ID
-        INNER JOIN stock ON transactions.product_ID = stock.product_ID
-        WHERE transaction_ID = {id};
-    """)
+    db = sql.connect('db.sqlite3')
+    # cur = db.cursor()
+    
+    while True:
+        menu()
+        choice = int(input())
+        if choice == 1:
+            print("| Transaction Directory |")
+            transac_info(db)
+        
+        elif choice == 2:
+            item_id = int(input("Enter the item id to restock : "))
+            item_quantity = int(input("Enter the quantity of the item to restock : "))
+            reStock(db, item_id, item_quantity)
 
-    info = cursor.fetchall()
-    info = info[0]
+        elif choice == 3:
+            order_id = int(input("Enter the order id to calculate price : "))
+            priceCalc(db, order_id)
 
-    print("==================Transaction Details======================")
-    print("ID: ", info[0])
-    print("Product ID: ", info[1])
-    print("Product: ", info[2])
-    print("Quantity: ", info[3])
-    print("Customer ID: ", info[4])
-    print("Customer Name: ", info[5])
-    print("Passed? :", info[6])
-    print("============================================================")
+        elif choice == 4:
+            item_id = int(input("Enter the item id to get information : "))
+            productInfo(db, item_id)
+            
+        elif choice == 5:
+            item_name = input("Enter the new product name : ")
+            item_price = int(input("Enter the product price : "))
+            item_quantity = int(input("Enter the initial quantity to stock : "))
+            add_product(db, item_name, item_quantity, item_price)
 
-#################################################################################################
+        elif choice == 6:
+            lowStockRestock(db)
 
-mydb = mysql.connector.connect(
-    host = "localhost",
-    user = "root",
-    password = "greatboy"
-)
+        elif choice == 7:
+            print("=====================================================")
+            print("Successfully exited\n")
+            print("=====================================================")
+            break
+        
+        else:
+            print("=====================================================")
+            print("!! Enter a valid operation number !!")
+            print("=====================================================")
 
-mycursor = mydb.cursor()
-mycursor.execute("USE Vending_DB;")
-
+if __name__ == "__main__":
+    main()
 

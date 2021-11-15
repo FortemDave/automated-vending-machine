@@ -5,6 +5,7 @@ from django.db.models.fields import CharField
 
 class Item(models.Model):
     item_name = models.CharField(max_length=100)
+    item_picture_url = models.CharField(max_length=100, default="")
     item_price = models.IntegerField(default=0)
     item_quantity_available = models.IntegerField(default=10)
     # item_selected = models.IntegerField(default=0)
@@ -14,4 +15,4 @@ class Item(models.Model):
 class order(models.Model):
     # order_id = models.AutoField(primary_key=True)
     phone_no = models.CharField(max_length=13, default="")
-    items_json = models.CharField(max_length=2500, default="")
+    items_json = models.CharField(max_length=2500, default="{}")

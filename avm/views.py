@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Item, order
+import json
+import sqlite3
 # Create your views here.
 
 def index(request):
@@ -12,6 +14,7 @@ def home(request):
 
 def cart(request):
     item_list = Item.objects.all()
+
     context = {
         'item_list': item_list
     }
@@ -19,8 +22,36 @@ def cart(request):
 
 def checkout(request):
     # item_list = Item.objects.all()
+    db = sqlite3.connect('db.sqlite3')
+    cursor = db.cursor()
     if request.method == "POST":
         itemJson = request.POST.get('itemsJson','')
+
+        dict_obj = json.loads(itemJson)
+
+        keys = dict_obj.keys()
+        ids = [key[2:] for key in keys]
+
+        for id in ids:
+            dict_key = 'pr' + id
+            dict_list = dict_obj[dict_key]
+            quantity = dict_list[0]
+
+            cursor.execute(f'''
+            SELECT item_quantity_available FROM avm_item
+            WHERE id = {id};
+            ''')
+
+            avail = cursor.fetchall()[0][0]
+            
+            cursor.execute(f'''
+            UPDATE avm_item
+            SET item_quantity_available = {avail-quantity}
+            WHERE id = {id};
+            ''')
+
+            db.commit()
+
         phoneNo = request.POST.get('phone','')
         orders =  order(items_json = itemJson, phone_no = phoneNo)
         orders.save()
@@ -30,6 +61,10 @@ def checkout(request):
             'thank' : thank,
             'id':id
         }
+        # print(keys)
         return render(request, 'avm/checkout.html', context)
 
     return render(request, 'avm/checkout.html')
+
+def paytm(request):
+    return render(request, 'avm/paytm.html')
