@@ -1,3 +1,12 @@
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,16 +38,36 @@
         <h1>Automated Vending Machine</h1>
     </div>
     <div class="container">
+        <!-- <div class="topitemDetailsBox">
+            <h3 class="extra"> Shopping Cart : (1 item)</h3>
+            <div class="itemDetailsBox">
+                <img src="https://developer.paytm.com/demo//static/images/shirt.png?v=1.8" alt="shirt">
+                <div class="item-discription">
+                    <span class="itemHeading">Mock Formal Shirt</span>
+                    <p class="star">
+                        <span>&#9733;</span>
+                        <span>&#9733;</span>
+                        <span>&#9733;</span>
+                        <span>&#9733;</span>
+                        <span>&#9733;</span>
+                    </p>
+                    <p><b>Rs 1.00</b></p>
+                    <p class="product-description extra">Paytm provides an end-to-end online payments solution. We accept and validate
+                        Internet payments via Credit Card, Debit Card, Net-Banking,
+                        UPI and popular Wallets from the end customers in real-time.</p>
+                </div>
+            </div>
+        </div> -->
         <div class="topRightBox">
             <h3>Order Summary</h3>
-            
             <div class="rightBox">
                  <div class="orderDetails">
                     <div class="orderSummaryBox">
-                        <p class="itemprice extra" ><span>Total MRP&nbsp;<b class="greyText">(Inclusive of all charges)</b></span><b>Rs </b> <span id="price_mrp"></span></p>
-                        <p class="itemprice extra"><span>Discount</span><span> <b>Rs </b>  0.00</span></p>
-                        <p class="itemprice"><span><b>Total Amount Payable</b></span><span> <b>Rs </b> <b id="finalPrice">Rs </b></span></p>
-                        <button class="button" id="paytmWithPaytm "  onclick="myFunc()">Pay with Paytm</button>
+                        <p class="itemprice extra"><span>Total MRP&nbsp;<b class="greyText">(Inclusive of all charges)</b></span><span>Rs </span></p>
+                        <p class="itemprice extra"><span>Discount</span><span>Rs 0.00</span></p>
+                        <!-- <p class="itemprice extra"><span>Shipping Charges</span>Rs 0.00<span></span></p> -->
+                        <p class="itemprice"><span><b>Total Amount Payable</b></span><span><b>Rs 1.00</b></span></p>
+                        <button class="button" id="paytmWithPaytm">Pay with Paytm</button>
                     </div>
                 </div>
                 <br>
@@ -49,17 +78,50 @@
     </div>
 </div>
 
-<script>
-    let final_price = localStorage.getItem('totalPrice');
-    let final_price_str = toString(final_price)
-    document.getElementById('price_mrp').innerHTML = final_price;
-    document.getElementById('finalPrice').innerHTML = final_price;
 
+<script type="text/javascript">
 
-    function myFunc(){
-    alert('Thanks for using this machine.');
-      localStorage.clear();
-      document.location = '{% url 'home' %}';
+    document.getElementById("paytmWithPaytm").addEventListener("click", function(){
+        onScriptLoad("80f5e53cffd34419a2fc72a653950bf21637129535345","1637128888417","1.00");
+    });
+    function onScriptLoad(txnToken, orderId, amount) {
+        var config = {
+            "root": "",
+            "flow": "DEFAULT",
+            "merchant":{
+                 "name":"XYZ Enterprises",
+                 "logo":"https://developer.paytm.com/demo//static/images/merchant-logo.png?v=1.4"
+             },
+             "style":{
+                 "headerBackgroundColor":"#8dd8ff",
+                 "headerColor":"#3f3f40"
+            },
+            "data": {
+                "orderId": orderId,
+                "token": txnToken,
+                "tokenType": "TXN_TOKEN",
+                "amount": amount
+            },
+            "handler":{
+                 "notifyMerchant": function (eventName, data) {
+                    if(eventName == 'SESSION_EXPIRED'){
+                        alert("Your session has expired!!");
+                        location.reload();
+                    }
+                 }
+            }
+        };
+
+        if (window.Paytm && window.Paytm.CheckoutJS) {
+            // initialze configuration using init method
+            window.Paytm.CheckoutJS.init(config).then(function onSuccess() {
+                console.log('Before JS Checkout invoke');
+                // after successfully update configuration invoke checkoutjs
+                window.Paytm.CheckoutJS.invoke();
+            }).catch(function onError(error) {
+                console.log("Error => ", error);
+            });
+        }
     }
 </script>
 
@@ -74,7 +136,7 @@
       </ul>
       </div>
       <div class="copyright footerlinks">
-        <ul><li>© 2021, Prateek Agrawal</li></ul>
+        <ul><li>© 2020, One97 Communications Pvt. Ltd</li></ul>
       </div>
     </div>
   </footer>
