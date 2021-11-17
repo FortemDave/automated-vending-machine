@@ -1,44 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Demo Transaction with JS Checkout</title>
-    <link rel="shortcut icon" type="image/png" href="https://developer.paytm.com/demo//static/images/icon.png?v=1.9"/>
+    <link rel="shortcut icon" type="image/png" href="https://developer.paytm.com/demo//static/images/icon.png?v=1.9" />
     <script type="application/javascript" src="https://developer.paytm.com/demo//static/js/jquery.min.js"></script>
     <link href="https://developer.paytm.com/demo//static/css/style.css?v=1.9" rel="stylesheet" />
-    
-    	<script type="application/javascript" src="https://securegw.paytm.in//merchantpgpui/checkoutjs/merchants/PYTMDM29354165830326.js"></script>
-	
+
+    <script type="application/javascript"
+        src="https://securegw.paytm.in//merchantpgpui/checkoutjs/merchants/PYTMDM29354165830326.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
 
 </head>
+
 <body>
-<header>
-    <div class="header-container">
-        <a href="https://developer.paytm.com/docs/">
-            <div class="logo">
-                <span><img src="https://developer.paytm.com/demo//static/images/logo.png?v=1.9" alt="paytm logo image" /></span>
+    <header>
+        <div class="header-container">
+            <a href="https://developer.paytm.com/docs/">
+                <div class="logo">
+                    <span><img src="https://developer.paytm.com/demo//static/images/logo.png?v=1.9"
+                            alt="paytm logo image" /></span>
 
-            </div>
-        </a>
-    </div>
+                </div>
+            </a>
+        </div>
 
-</header>
-<div class="main-content">
-    <div class="heading">
-        <h1>Automated Vending Machine</h1>
-    </div>
-    <div class="container">
-        <div class="topRightBox">
-            <h3>Order Summary</h3>
-            
-            <div class="rightBox">
-                 <div class="orderDetails">
-                    <div class="orderSummaryBox">
-                        <p class="itemprice extra" ><span>Total MRP&nbsp;<b class="greyText">(Inclusive of all charges)</b></span><b>Rs </b> <span id="price_mrp"></span></p>
-                        <p class="itemprice extra"><span>Discount</span><span> <b>Rs </b>  0.00</span></p>
-                        <p class="itemprice"><span><b>Total Amount Payable</b></span><span> <b>Rs </b> <b id="finalPrice">Rs </b></span></p>
-                        <button class="button" id="paytmWithPaytm " onclick="myFunc()">Pay with Paytm</button>
+    </header>
+    <div class="main-content">
+        <div class="heading">
+            <h1>Automated Vending Machine</h1>
+        </div>
+        <div class="container">
+            <div class="topRightBox">
+                <h3>Order Summary</h3>
+
+                <div class="rightBox">
+                    <div class="orderDetails">
+                        <div class="orderSummaryBox">
+                            <p class="itemprice extra"><span>Total MRP&nbsp;<b class="greyText">(Inclusive of all
+                                        charges)</b></span><b>Rs </b> <span id="price_mrp"></span></p>
+                            <p class="itemprice extra"><span>Discount</span><span> <b>Rs </b> 0.00</span></p>
+                            <p class="itemprice"><span><b>Total Amount Payable</b></span><span> <b>Rs </b> <b
+                                        id="finalPrice">Rs </b></span></p>
+                            <button class="button" id="paytmWithPaytm " onclick="myFunc()">Pay with Paytm</button>
+                            <button type="button" style="margin: auto;margin-top:20px;text-align:center;"
+                                class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                Pay with Paytm
+                            </button>
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="container">
+
+                                    <div id="accordion">
+                                        <div class="card">
+                                            <div class="card-header" id="headingOne">
+                                                <h5 class="mb-0">
+                                                    <button class="btn btn-link" data-toggle="collapse"
+                                                        data-target="#collapseOne" aria-expanded="true"
+                                                        aria-controls="collapseOne">
+                                                        Net Banking
+                                                    </button>
+                                                </h5>
+                                            </div>
+
+                                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                                data-parent="#accordion">
+                                                <div class="card-body">
+                                                    <div class="container">
+                                                    <div id="net-banking" class="pt-3 net-banking">
+                                                        <div class="form-group "> <label for="Select Your Bank">
+                                                                <h6>Select your Bank</h6>
+                                                            </label> <select class="form-control" id="ccmonth">
+                                                                <option value="" selected disabled>--Please select your
+                                                                    Bank--</option>
+                                                                <option>Bank 1</option>
+                                                                <option>Bank 2</option>
+                                                                <option>Bank 3</option>
+                                                                <option>Bank 4</option>
+                                                                <option>Bank 5</option>
+                                                                <option>Bank 6</option>
+                                                                <option>Bank 7</option>
+                                                                <option>Bank 8</option>
+                                                                <option>Bank 9</option>
+                                                                <option>Bank 10</option>
+                                                            </select> </div>
+                                                        <div class="form-group">
+                                                            <p> <button type="button" class="btn btn-primary "><i
+                                                                        class="fas fa-mobile-alt mr-2"></i> Proceed
+                                                                    Payment</button> </p>
+                                                        </div>
+                                                        <p class="text-muted">Note: After clicking on the button, you
+                                                            will be directed to a
+                                                            secure gateway for payment. After completing the payment
+                                                            process, you will be
+                                                            redirected back to the website to view details of your
+                                                            order. </p>
+                                                    </div> <!-- End -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-header" id="headingTwo">
+                                                <h5 class="mb-0">
+                                                    <button class="btn btn-link collapsed" data-toggle="collapse"
+                                                        data-target="#collapseTwo" aria-expanded="false"
+                                                        aria-controls="collapseTwo">
+                                                        Credit Card
+                                                    </button>
+                                                </h5>
+                                            </div>
+                                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                                                data-parent="#accordion">
+                                                <div class="card-body">
+                                                    <div class="container">
+                                                    <div class="tab-content">
+                                                        <!-- credit card info-->
+                                                        <div id="credit-card" class="   pt-3 credit-card">
+                                                            <form role="form" onsubmit="event.preventDefault()">
+                                                                <div class="form-group"> <label for="username">
+                                                                        <h6>Card Owner</h6>
+                                                                    </label> <input type="text" name="username"
+                                                                        placeholder="Card Owner Name" required
+                                                                        class="form-control "> </div>
+                                                                <div class="form-group"> <label for="cardNumber">
+                                                                        <h6>Card number</h6>
+                                                                    </label>
+                                                                    <div class="input-group"> <input type="text"
+                                                                            name="cardNumber"
+                                                                            placeholder="Valid card number"
+                                                                            class="form-control " required>
+                                                                        <div class="input-group-append"> <span
+                                                                                class="input-group-text text-muted"> <i
+                                                                                    class="fab fa-cc-visa mx-1"></i> <i
+                                                                                    class="fab fa-cc-mastercard mx-1"></i>
+                                                                                <i class="fab fa-cc-amex mx-1"></i>
+                                                                            </span> </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-sm-8">
+                                                                        <div class="form-group"> <label><span
+                                                                                    class="hidden-xs">
+                                                                                    <h6>Expiration Date</h6>
+                                                                                </span></label>
+                                                                            <div class="input-group"> <input
+                                                                                    type="number" placeholder="MM"
+                                                                                    name="" class="form-control"
+                                                                                    required> <input type="number"
+                                                                                    placeholder="YY" name=""
+                                                                                    class="form-control" required>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-sm-4">
+                                                                        <div class="form-group mb-4"> <label
+                                                                                data-toggle="tooltip"
+                                                                                title="Three digit CV code on the back of your card">
+                                                                                <h6>CVV <i
+                                                                                        class="fa fa-question-circle d-inline"></i>
+                                                                                </h6>
+                                                                            </label> <input type="text" required
+                                                                                class="form-control"> </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card-footer"> <button type="button"
+                                                                        class="subscribe btn btn-primary btn-block shadow-sm">
+                                                                        Confirm Payment
+                                                                    </button>
+                                                            </form>
+                                                        </div>
+                                                    </div> <!-- End -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-header" id="headingThree">
+                                                <h5 class="mb-0">
+                                                    <button class="btn btn-link collapsed" data-toggle="collapse"
+                                                        data-target="#collapseThree" aria-expanded="false"
+                                                        aria-controls="collapseThree">
+                                                        Paytm
+                                                    </button>
+                                                </h5>
+                                            </div>
+                                            <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                                                data-parent="#accordion">
+                                                <div class="card-body">
+                                                    <div id="paypal" class=" pt-3 paypal">
+                                                        <h6 class="pb-2">Select your paytm account type</h6>
+                                                        <div class="form-group "> <label class="radio-inline"> <input
+                                                                    type="radio" name="optradio" checked> Domestic
+                                                            </label> <label class="radio-inline">
+                                                                <input type="radio" name="optradio"
+                                                                    class="ml-5">International </label></div>
+                                                        <p> <button type="button" class="btn btn-primary "><i
+                                                                    class="fab fa-paypal mr-2"></i>
+                                                                Log into my Paytm</button> </p>
+                                                        <p class="text-muted"> Note: After clicking on the button, you
+                                                            will be directed to a
+                                                            secure gateway for payment. After completing the payment
+                                                            process, you will be
+                                                            redirected back to the website to view details of your
+                                                            order. </p>
+                                                    </div> <!-- End -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <!-- <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div> -->
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                                <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <br>
@@ -47,36 +240,49 @@
         </div>
         <!-- end of top right box -->
     </div>
-</div>
-
-<script>
-    let final_price = localStorage.getItem('totalPrice');
-    let final_price_str = toString(final_price)
-    document.getElementById('price_mrp').innerHTML = final_price;
-    document.getElementById('finalPrice').innerHTML = final_price;
-
-
-    function myFunc(){
-    alert('Thanks for using this machine.');
-      localStorage.clear();
-      document.location = '{% url 'home' %}';
-    }
-</script>
-
-<footer>
-    <div class="footer-bottom">
-      <div class="lightBlue"></div>
-      <div class="darkBlue"></div>
-      <div class="linksdiv">
-      <ul class="footerlinks">
-        <li><a href="https://paytm.com/about-us/our-policies/" target="_blank">Terms of Service</li></a></li>
-        <li><a href="https://paytm.com/about-us/our-policies/" target="_blank">Privacy Policy</a></li>
-      </ul>
-      </div>
-      <div class="copyright footerlinks">
-        <ul><li>© 2021, Prateek Agrawal</li></ul>
-      </div>
     </div>
-  </footer>
+
+    <script>
+        let final_price = localStorage.getItem('totalPrice');
+        let final_price_str = toString(final_price)
+        document.getElementById('price_mrp').innerHTML = final_price;
+        document.getElementById('finalPrice').innerHTML = final_price;
+
+
+        function myFunc() {
+            alert('Thanks for using this machine.');
+            localStorage.clear();
+            document.location = '{% url 'home' %}';
+        }
+    </script>
+
+    <footer>
+        <div class="footer-bottom">
+            <div class="lightBlue"></div>
+            <div class="darkBlue"></div>
+            <div class="linksdiv">
+                <ul class="footerlinks">
+                    <li><a href="https://paytm.com/about-us/our-policies/" target="_blank">Terms of Service</li></a>
+                    </li>
+                    <li><a href="https://paytm.com/about-us/our-policies/" target="_blank">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="copyright footerlinks">
+                <ul>
+                    <li>© 2021, Prateek Agrawal</li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 </body>
+
 </html>
