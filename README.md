@@ -10,10 +10,16 @@ Steps to view this website -
 Pages 
 1. Home Page
   ![image](https://user-images.githubusercontent.com/82581367/142725320-c92bc14f-b9c3-4bd9-b40a-678d2cde135f.png)
+  
+  
 2. Cart Page
   ![image](https://user-images.githubusercontent.com/82581367/142725334-e52416ad-753c-41b3-8e7d-279b413c4f06.png)
+  
+  
 3. Checkout Page
-  ![image](https://user-images.githubusercontent.com/82581367/142725342-3af92d3a-4b1f-44bf-bcb9-3657398781dc.png)
+  ![image](https://user-images.githubusercontent.com/82581367/142725442-37e82f86-9230-4bde-974c-a0ce8d8b41d2.png)
+
+
 4. Payment Page
   ![image](https://user-images.githubusercontent.com/82581367/142725363-da70f605-2ebb-462c-a37e-a4b79539da64.png)
 
