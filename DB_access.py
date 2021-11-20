@@ -143,12 +143,13 @@ def productInfo(db, item_id):
     return itemName, item_id, itemQuantity, itemPrice
     # print(rawInfo)
 
-def add_product(db, product_name, price, quantity, img_url = ""):
+def add_product(db, product_name, price, quantity, img_url = " "):
     cur = db.cursor()
 
-    cur.execute(f'''INSERT INTO avm_item (item_price, item_quantity_available, item_name)
-                    VALUES ({price}, {quantity}, {product_name});
-        ''')
+    with db:
+        cur.execute(f'''INSERT INTO avm_item (item_price, item_quantity_available, item_name, item_picture_url)
+                        VALUES ({price}, {quantity}, '{product_name}', '{img_url}');
+            ''')
 
     # cur.execute(f'''INSERT INTO avm_item ({price}, {quantity}, {product_name})
     #                 VALUES (item_price, item_quantity_available, item_name);
