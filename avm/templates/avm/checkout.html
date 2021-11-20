@@ -69,9 +69,13 @@
       <input type="text" class="form-control" name="phone" id="phone" placeholder="Phone Number" required
         onkeyup="check()"><span id="message"></span>
       <br>
+      <!-- <input type="text" class="form-control" placeholder="otp " id="otp" > -->
+      <!-- <button class="btn btn-primary" onclick="otpcheck()"> Check Otp</button> -->
+      <br>
       <div id="submitButton">
        <button class="btn btn-primary" type="submit" disabled >Place Order</button>
       </div>
+      
     </form>
   </div>
   <nav class="navbar fixed-bottom navbar-expand-lg navbar-dark bg-dark">
@@ -94,7 +98,19 @@
       </div>
     </div>
   </nav>
-
+<!-- 
+    <script>
+      let otp = {{ code }}
+      function otpcheck(){
+        if(document.getElementById('otp').innerHTML == otp){
+          console.log("Otp matched");
+          document.location = '{% url 'paytm' %}';
+        }
+        else{
+          console.log("Invalid Otp");
+        }
+      };
+    </script> -->
 
   <script>
     function check() {
